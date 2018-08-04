@@ -3,6 +3,7 @@
 A version of Events Management of PhantomCry that uses the tecnologies; vuejs, nuxt, vuetify, axios, express, mysql
 
 ## Build Setup
+### import eventsmanagementdb.sql
 
 ### install dependencies
 `$ npm install` or `$ yarn install`
