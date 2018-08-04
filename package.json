@@ -1,0 +1,28 @@
+{
+  "name": "event-management-system",
+  "version": "0.0.1",
+  "description": "SLU event tracking/management system",
+  "author": "Group 3",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.0.0",
+    "express": "^4.15.3",
+    "formidable": "^1.2.1",
+    "moment": "^2.22.2",
+    "mysql": "^2.15.0",
+    "nuxt": "^1.0.0",
+    "vuetify": "^1.0.19"
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.1",
+    "nodemon": "^1.11.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1"
+  }
+}
