@@ -16,7 +16,7 @@
         <v-btn @click="addAlbum" slot="activator" icon depressed color="red white--text">
           <v-icon>folder</v-icon>
         </v-btn>
-        <span>Add an album</span>
+        <span>Add an album/Add images to an album</span>
       </v-tooltip>
     </div>
 
