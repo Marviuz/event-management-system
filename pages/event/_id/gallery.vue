@@ -26,8 +26,8 @@
         <v-card>
           <v-card-text>
             <v-layout row wrap>
-              <v-flex xs2 v-for="(gallery, index) in items" :key="index">
-                <v-card v-if="gallery.album === album">
+              <v-flex xs2 v-for="(gallery, index) in items" :key="index" v-if="gallery.album === album">
+                <v-card>
                   <v-card-media
                     contain
                     height="100px"
