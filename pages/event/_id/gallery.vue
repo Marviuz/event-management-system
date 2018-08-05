@@ -25,6 +25,8 @@
         <div slot="header">{{ album }}</div>
         <v-card>
           <v-card-text>
+            <v-btn color="blue white--text" @click="assignAlbumValues(album)">rename album</v-btn>
+            <v-btn color="red white--text" @click="deleteAlbum(album)">delete album</v-btn>
             <v-layout row wrap>
               <v-flex xs2 v-for="(gallery, index) in items" :key="index" v-if="gallery.album === album">
                 <v-card>
@@ -120,6 +122,27 @@
       </v-card>
     </v-dialog>
 
+    <!-- Rename album dialog -->
+    <v-dialog
+      v-model="rename.dialog"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card>
+        <v-card-text>
+          <v-text-field
+            label="New Album Name"
+            v-model="rename.newAlbumName"
+          ></v-text-field>
+          <div>
+            <v-spacer></v-spacer>
+            <v-btn @click="renameAlbum">rename</v-btn>
+          </div>  
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -140,6 +163,11 @@ export default {
         filenames: [],
         albumDiaog: false,
         albumName: null
+      },
+      rename: {
+        dialog: false,
+        newAlbumName: null,
+        currentAlbumName: null
       }
     }
   },
@@ -247,6 +275,32 @@ export default {
 
       this.getGallery()
       this.gallery.albumDiaog = false
+    },
+    assignAlbumValues (album) {
+      this.rename.currentAlbumName = album
+      this.rename.newAlbumName = album
+      this.rename.dialog = true
+    },
+    renameAlbum () {
+      gallery.renameAlbum({
+        newAlbumName: this.rename.newAlbumName,
+        currentAlbumName: this.rename.currentAlbumName,
+        eventId: this.$route.params.id
+      })
+
+      this.rename = {
+        dialog: false,
+        newAlbumName: null,
+        currentAlbumName: null
+      }
+      this.getGallery ()
+    },
+    deleteAlbum (album) {
+      gallery.deleteAlbum({
+        album,
+        eventId: this.$route.params.id
+      })
+      this.getGallery ()
     }
   }
 }

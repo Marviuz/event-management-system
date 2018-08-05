@@ -277,6 +277,23 @@ router.post('/api/gallery/album', (req, res) => {
   })
 })
 
+router.post('/api/gallery/album/rename', (req, res) => {
+  db.query({
+    sql: 'UPDATE gallery SET albumname=? WHERE albumname=? AND eventID=?',
+    options: [req.body.newAlbumName, req.body.currentAlbumName, req.body.eventId],
+    msg: '/api/gallery/album/rename'
+  })
+})
+
+router.post('/api/gallery/album/delete', (req, res) => {
+  db.query({
+    sql: 'DELETE FROM gallery WHERE albumname=? AND eventID=?',
+    options: [req.body.album, req.body.eventId],
+    msg: '/api/gallery/album/delete'
+  })
+})
+
+// ALL UPLOADS GO TO THIS ROUTE
 router.post('/api/upload', (req, res) => {
   const form = new formidable.IncomingForm ()
 
