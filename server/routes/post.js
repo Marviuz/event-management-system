@@ -201,6 +201,44 @@ router.post('/api/artifact/save', (req, res) => {
   })
 })
 
+router.post('/api/artifact/update', (req, res) => {
+  db.query({
+    sql: 'INSERT IGNORE INTO fields (fieldname) VALUES (?)',
+    options: [req.body.name],
+    msg: '/api/artifact/update INSERT',
+    chain: () => {
+      db.query({
+        sql: 'SELECT * FROM fields WHERE fieldname=?',
+        options: [req.body.name],
+        msg: '/api/artifact/update SELECT',
+        chain: field => {
+          db.query({
+            sql: 'UPDATE elements SET text=?, file=?, fieldID=?, eventID=? WHERE elementID=?',
+            options: [
+              req.body.description,
+              JSON.stringify(req.body.files),
+              field[0].idfield,
+              req.body.eventId,
+              req.body.elementId
+            ],
+            msg: '/api/artifact/update UPDATE',
+            chain: () => {
+              db.query({
+                sql: 'SELECT * FROM fields INNER JOIN elements ON idfield=fieldid INNER JOIN events ON eventid=idevents WHERE idevents=?',
+                options: [req.body.eventId],
+                msg: '/api/artifact/update SELECT',
+                chain: (rows) => {
+                  return res.json(rows)
+                }
+              })
+            }
+          })
+        }
+      })
+    }
+  })
+})
+
 router.post('/api/artifact/delete', (req, res) => {
   db.query({
     sql: 'DELETE FROM elements WHERE elementId=?',

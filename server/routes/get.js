@@ -34,6 +34,16 @@ router.get('/api/tags', (req, res) => {
   })
 })
 
+router.get('/api/artifacts', (req, res) => {
+  db.query({
+    sql: 'SELECT * FROM fields',
+    msg: '/api/artifacts',
+    chain: data => {
+      return res.json(data)
+    }
+  })
+})
+
 router.get('/api/subevents', (req, res) => {
   db.query({
     sql: 'SELECT * FROM events WHERE parent=?',

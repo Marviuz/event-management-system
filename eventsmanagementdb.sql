@@ -111,8 +111,9 @@ DROP TABLE IF EXISTS `fields`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fields` (
   `idfield` int(11) NOT NULL AUTO_INCREMENT,
-  `fieldname` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`idfield`)
+  `fieldname` varchar(250) NOT NULL,
+  PRIMARY KEY (`idfield`),
+  UNIQUE KEY `fieldname_UNIQUE` (`fieldname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -207,4 +208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-04 16:48:00
+-- Dump completed on 2018-08-05 22:44:42

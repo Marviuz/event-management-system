@@ -6,5 +6,8 @@ export default {
   },
   deleteArtifact (data) {
     return axios.post('/api/artifact/delete', data)
+  },
+  updateArtifact (data) {
+    return axios.post('/api/artifact/update', data)
   }
 }
