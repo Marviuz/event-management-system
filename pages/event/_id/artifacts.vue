@@ -39,12 +39,25 @@
       </v-card-actions>
     </v-card>
     
-    <v-card class="mb-2" v-for="artifact in artifacts" :key="artifact.elementId">
+    <v-card class="mb-2" v-for="artifact in artifacts" :key="artifact.elementID">
       <v-card-title>
         <div>
           <h3 class="headline mb-0">{{ artifact.fieldname }}</h3>
-          <div v-if="!!artifact.text">{{ artifact.text }}</div>
+          <p class="body-1" v-if="!!artifact.text">{{ artifact.text }}</p>
         </div>
+        <v-spacer></v-spacer>
+        <v-tooltip top>
+          <v-btn slot="activator" fab flat small color="blue">
+            <v-icon>edit</v-icon>
+          </v-btn>
+          <span>Edit this field</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <v-btn slot="activator" fab flat small color="red" @click="deleteArtifact(artifact.elementID)">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <span>Delete this field</span>
+        </v-tooltip>
       </v-card-title>
       
       <v-list v-if="!!JSON.parse(artifact.file).length">
@@ -127,6 +140,13 @@ export default {
         files: []
       }
       this.getArtifacts ()
+    },
+    async deleteArtifact (id) {
+      await artifact.deleteArtifact({
+        elmId: id,
+        id: this.$route.params.id
+      })
+        .then(res => this.artifacts = res.data)
     }
   }
 }

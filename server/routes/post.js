@@ -201,6 +201,24 @@ router.post('/api/artifact/save', (req, res) => {
   })
 })
 
+router.post('/api/artifact/delete', (req, res) => {
+  db.query({
+    sql: 'DELETE FROM elements WHERE elementId=?',
+    options: [req.body.elmId],
+    msg: '/api/artifact/delete',
+    chain: data => {
+      db.query({
+        sql: 'SELECT * FROM fields INNER JOIN elements ON idfield=fieldid INNER JOIN events ON eventid=idevents WHERE idevents=?',
+        options: [req.body.id],
+        msg: '/api/event/artifacts',
+        chain: data => {
+          return res.json(data)
+        }
+      })
+    }
+  })
+})
+
 router.post('/api/gallery/save', (req, res) => {
   JSON.parse(req.body.pics).forEach(pic => {
     db.query({
