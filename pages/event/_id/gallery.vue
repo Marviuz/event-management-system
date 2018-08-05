@@ -89,8 +89,6 @@
         <v-card-title class="title grey lighten-2" primary-title>
           <span>
             <v-combobox label="Album Name" v-model="gallery.albumName" :items="albums"></v-combobox>
-            {{ gallery.albumName }}
-            <!-- <v-text-field label="Album name" v-model="gallery.albumName"></v-text-field> -->
           </span>
           <v-spacer></v-spacer>
           <v-btn @click="gallery.albumDiaog = false" small icon>

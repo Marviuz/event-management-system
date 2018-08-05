@@ -26,10 +26,16 @@
         </v-list>
       </v-card-text>
       <v-card-actions>
-        <v-btn depressed color="purple white--text" @click="selectFiles"><v-icon left>attach_file</v-icon>attach file/s</v-btn>
+        <v-btn depressed color="purple white--text" @click="selectFiles">
+          <v-icon left>attach_file</v-icon>
+          <span>attach file/s</span>
+        </v-btn>
         <input type="file" style="display: none;" ref="fileInput" multiple @change="onFileSelect">
         <v-spacer></v-spacer>
-        <v-btn depressed color="blue white--text" @click="save"><v-icon left>save</v-icon>save</v-btn>
+        <v-btn depressed color="blue white--text" @click="save" :disabled="!field.name">
+          <v-icon left>save</v-icon>
+          <span>save</span>
+        </v-btn>
       </v-card-actions>
     </v-card>
     
@@ -41,9 +47,9 @@
         </div>
       </v-card-title>
       
-      <v-list v-if="!!field.files.length">
+      <v-list v-if="!!JSON.parse(artifact.file).length">
         <v-divider></v-divider>
-        <div v-for="(file, index) in field.files" :key="index">
+        <div v-for="(file, index) in JSON.parse(artifact.file)" :key="index">
           <v-list-tile avatar>
             <v-list-tile-avatar color="grey lighten-2">
               <v-icon v-if="'bmp jpg jpeg png gif webp'.indexOf(file.split('.').pop().toLowerCase())">image</v-icon>
@@ -114,6 +120,11 @@ export default {
       await artifact.save(this.field)
       if (!!this.field.files.length) {
         await file.upload(this.formData)
+      }
+      this.field = {
+        name: null,
+        description: null,
+        files: []
       }
       this.getArtifacts ()
     }

@@ -108,34 +108,32 @@
       </v-flex>
 
       <v-flex xs6>
-        <!-- <v-tooltip top> -->
-          <v-combobox
-            slot="activator"
-            label="Date/s"
-            v-model="event.dates"
-            multiple
-            chips
-            readonly
-            clearable
-            prepend-icon="date_range"
-            append-icon=""
+        <v-combobox
+          slot="activator"
+          label="Date/s"
+          v-model="event.dates"
+          multiple
+          chips
+          readonly
+          clearable
+          prepend-icon="date_range"
+          append-icon=""
+        >
+          <template
+            slot="selection"
+            slot-scope="{ item, parent }"
           >
-            <template
-              slot="selection"
-              slot-scope="{ item, parent }"
-            >
-              <v-chip>
-                <span class="pr-2">{{ item }}</span>
-                <v-icon @click="parent.selectItem(item)">close</v-icon>
-              </v-chip>
-            </template>
-          </v-combobox>
-          <!-- <span>Press backspace to remove dates</span>
-        </v-tooltip> -->
+            <v-chip>
+              <span class="pr-2">{{ item }}</span>
+              <v-icon @click="parent.selectItem(item)">close</v-icon>
+            </v-chip>
+          </template>
+        </v-combobox>
 
         <v-btn
           @click="save"
           color="blue white--text"
+          :disabled="!(event.name && event.organizer.length && event.venue.length && event.tags.length)"
         >
           <v-icon left>save</v-icon>
           <span>save</span>
@@ -154,7 +152,7 @@
     >
       <v-card>
         <v-card-text>
-          Please wait...
+          <span>Saving please wait...</span>
           <v-progress-linear
             indeterminate
             class="mb-0"
@@ -213,6 +211,13 @@ export default {
         this.event.id = this.data.idevents
         await event.update(this.event)
           .then(res => this.saving = !this.saving)
+      }
+      this.event = {
+        name: null,
+        organizer: [],
+        venue: [],
+        tags: [],
+        dates: []
       }
     }
   }
