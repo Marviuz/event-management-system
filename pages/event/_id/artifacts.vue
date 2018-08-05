@@ -60,7 +60,9 @@
           <span>Delete this field</span>
         </v-tooltip>
       </v-card-title>
-      
+      <v-card-text v-if="!!JSON.parse(artifact.file).length">
+        <div class="title">Attached File/s</div>
+      </v-card-text>
       <v-list v-if="!!JSON.parse(artifact.file).length">
         <v-divider></v-divider>
         <div v-for="(file, index) in JSON.parse(artifact.file)" :key="index">
@@ -97,28 +99,31 @@
             </v-layout>
           </v-card-title>
           <v-card-text v-if="updateArtifactField.files">
+            <div class="title">Attached File/s</div>
             <v-list>
               <v-list-tile v-for="(file, index) in updateArtifactField.files" :key="index">
                 <v-list-tile-content>
                   <v-list-tile-title>{{ file }}</v-list-tile-title>
                 </v-list-tile-content>
+                <v-list-tile-action>
+                  <v-btn icon @click="removeFromList(index)">
+                    <v-icon color="grey lighten-1">clear</v-icon>
+                  </v-btn>
+                </v-list-tile-action>
               </v-list-tile>
             </v-list>
           </v-card-text>
           <v-card-actions>
-            <v-btn depressed color="purple white--text" @click="selectFiles">
-              <v-icon left>attach_file</v-icon>
-              <span>attach file/s</span>
+            <v-btn icon large color="purple white--text" @click="() => this.$refs.editFileInput.click()">
+              <v-icon>add</v-icon>
             </v-btn>
-            <input type="file" style="display: none;" ref="fileInput" multiple @change="onFileSelect">
+            <input type="file" style="display: none;" ref="editFileInput" multiple @change="addToList">
             <v-spacer></v-spacer>
-            <v-btn depressed color="red white--text" @click="updateArtifactField.value = false">
-              <v-icon left>save</v-icon>
-              <span>cancel</span>
+            <v-btn icon large color="red white--text" @click="updateArtifactField.value = false">
+              <v-icon>close</v-icon>
             </v-btn>
-            <v-btn depressed color="blue white--text" @click="updateArtifactById" :disabled="buttonDisabler">
-              <v-icon left>save</v-icon>
-              <span>save</span>
+            <v-btn icon large color="blue white--text" @click="updateArtifactById" :disabled="buttonDisabler">
+              <v-icon>save</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -137,7 +142,11 @@ import file from '@/plugins/Upload'
 export default {
   data () {
     return {
-      prevFieldname: null,
+      initialFieldData: {
+        name: null,
+        description: null,
+        files: []
+      },
       updateArtifactField: {
         value: false,
         name: null,
@@ -164,7 +173,10 @@ export default {
   },
   computed: {
     buttonDisabler () {
-      return this.prevFieldname == this.updateArtifactField.name
+      const name = this.initialFieldData.name == this.updateArtifactField.name
+      const description = this.initialFieldData.description == this.updateArtifactField.description
+      const files = this.initialFieldData.files.length == this.updateArtifactField.files.length
+      return name && description && files
     }
   },
   methods: {
@@ -219,7 +231,11 @@ export default {
         .then(res => this.artifacts = res.data)
     },
     updateArtifact (artifact) {
-      this.prevFieldname = artifact.fieldname
+      this.initialFieldData = {
+        name: artifact.fieldname,
+        description: artifact.text,
+        files: JSON.parse(artifact.file)
+      }
       this.updateArtifactField = {
         fieldId: artifact.fieldID,
         elementId: artifact.elementID,
@@ -237,6 +253,28 @@ export default {
           this.updateArtifactField.value = false
           this.getFields ()
         })
+      if (!!this.formData) {
+        file.upload(this.formData)
+      }
+      this.formData = null
+    },
+    removeFromList(index) {
+      this.updateArtifactField.files.splice(this.updateArtifactField.files.indexOf(index), 1)
+    },
+    addToList (evt) {
+      const formData = new FormData ()
+      const initialFiles = this.updateArtifactField.files
+      const files = evt.target.files
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const filename = `${this.$route.params.id}-${moment().format('YYYY-DD-MM_hh-mm-ssa')}-${file.name}`
+        initialFiles.push(filename)
+
+        formData.append('uploads[]', file, filename)
+      }
+      
+      this.updateArtifactField.files = initialFiles
+      this.formData = formData
     }
   }
 }

@@ -26,8 +26,8 @@ DROP TABLE IF EXISTS `elements`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `elements` (
   `elementID` int(11) NOT NULL AUTO_INCREMENT,
-  `text` mediumtext,
-  `file` varchar(250) DEFAULT NULL,
+  `text` longtext,
+  `file` text,
   `fieldID` int(11) DEFAULT NULL,
   `eventID` int(11) DEFAULT NULL,
   PRIMARY KEY (`elementID`),
@@ -208,4 +208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-05 22:44:42
+-- Dump completed on 2018-08-06  2:51:52
