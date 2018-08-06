@@ -53,29 +53,39 @@
       </v-list>
 
       <v-container v-else-if="!$store.state.eventPage">
-        <v-date-picker
-          v-if="type !== 'year'"
-          :type="type"
-          v-model="date"
-          no-title
+        
+        <v-menu
+          ref="menu"
+          v-model="menu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          lazy
+          transition="scale-transition"
+          offset-y
           full-width
-        ></v-date-picker>
-        <!-- <v-select
-          @change.native="date = null"
-          v-if="type === 'year'"
-          :items="years"
-          v-model="date"
-          cache-items
-        ></v-select> -->
+          max-width="290px"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            v-model="date"
+            label="Something"
+            prepend-icon="event"
+            readonly
+          ></v-text-field>
 
-        <div class="title">Filter Event by:</div>
+          <v-date-picker
+            :type="type"
+            v-model="date"
+            no-title
+          >
+            <v-radio-group v-model="type" row>
+              <v-radio label="Date" value="date"></v-radio>
+              <v-radio label="month" value="month"></v-radio>
+            </v-radio-group>
+          </v-date-picker>
+        </v-menu>
 
-        <v-radio-group v-model="type">
-          <v-radio label="Date" value="date"></v-radio>
-          <v-radio label="month" value="month"></v-radio>
-          <!-- <v-radio label="Year" value="year"></v-radio> -->
-        </v-radio-group>
-        {{date}}
       </v-container>
     </v-navigation-drawer>
 
@@ -86,25 +96,14 @@
 </template>
 
 <script>
-// import moment from 'moment'
-
 export default {
   data () {
     return {
       date: null,
       type: 'date',
-      dark: false
-      // years: null
+      dark: false,
+      menu: false
     }
   },
-  // created () {
-  //   const start = moment().format('YYYY') - 100
-  //   const end = moment().format('YYYY') - 100 + 200
-  //   let years = []
-  //   for (let i = start; i <= end; i++) {
-  //     years.push(i)
-  //   }
-  //   this.years = years
-  // }
 }
 </script>

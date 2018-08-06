@@ -8,7 +8,8 @@ export default () => {
       subevent: {
         value: false,
         route: null
-      }
+      },
+      filter: null
     }
   })
 }

@@ -1,10 +1,11 @@
 <template>
   <v-container grid-list-md fluid>
     <v-layout row wrap>
-      <v-flex xs3 v-for="({idevents, eventname}, index) in events" :key="index">
+      <v-flex xs3 v-for="({idevents, eventname, dates}, index) in events" :key="index">
         <EventCard
           :link="`/event/${idevents}`"
           :title="eventname"
+          :dates="dates"
         />
       </v-flex>
     </v-layout>
